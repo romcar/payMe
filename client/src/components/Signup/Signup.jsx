@@ -117,7 +117,7 @@ export default class SignUp extends React.Component {
                   />
                   <Form.Input
                     onChange={this.handleChange}
-                    value={this.state.pass}
+                    value={this.state.pass ? this.state.pass : ''}
                     fluid
                     icon="eye"
                     iconPosition="left"
@@ -127,7 +127,7 @@ export default class SignUp extends React.Component {
                   />
                   <Form.Input
                     onChange={this.handleChange}
-                    value={this.state.reEnterPW}
+                    value={this.state.reEnterPW ? this.state.reEnterPW : ''}
                     fluid
                     icon="eye"
                     iconPosition="left"
