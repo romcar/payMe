@@ -50,7 +50,6 @@ export class UserCardForm extends React.Component {
   //     .catch(err => console.error(err));
   // }
 
-<<<<<<< 6f28a2e3072eaf867ae497be2466618d61b899ae
   // handleSubmit(event) {
   //   const { id } = this.props.session.user;
   //   const { firstName, lastName, profilePic, activeRole } = this.state;
@@ -66,23 +65,6 @@ export class UserCardForm extends React.Component {
   //       console.log(response);
   //     });
   // }
-=======
-  handleSubmit(event) {
-    const { id } = this.props.session.user;
-    const { firstName, lastName, profilePic, activeRole } = this.state;
-    event.preventDefault();
-
-    axios.patch((`/api/user?id=${id}`), {
-      first_name: firstName,
-      last_name: lastName,
-      profilePic,
-      activeRole,
-    })
-      .then((response) => {
-        console.log(response);
-      });
-  }
->>>>>>> Add about us page with stack and team pictures
 
   handleClearField() {
     this.setState({
