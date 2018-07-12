@@ -41,12 +41,24 @@ class HomePage extends React.Component {
 
   handleGetUserInformation(callback) {
     if (!this.props.session.user) {
+      console.error('OHHHHHH NO!')
       this.props.history.push('/login');
     }
     axios.get(`api/user?id=${this.props.session.user.id}`)
       .then((res) => {
         this.handleGetAppliedRoles((data) => {
-          this.setState({ currentRoles : data})
+          let temp;
+           for (let i = 0; i < data.length; i++) {
+             if (data[i].id + '' === this.state.currentUser[0].active_role + '') {
+               temp = this.state.currentUser[0];
+               temp.active_role = [data[i]];
+              }
+            }
+
+            temp = temp === undefined ? this.props.session.user : temp;
+            // debugger;
+            this.setState({currentUser: [temp], currentRoles : data});
+            this.props.setSession({ user: temp});
         });
         callback(res.data);
       });
@@ -56,6 +68,7 @@ class HomePage extends React.Component {
     axios.patch((`/api/user?id=${id}`), query)
       .then((res) => {
         this.handleGetUserInformation((data) => {
+
           this.setState({ currentUser: data });
         });
       });
@@ -74,15 +87,13 @@ class HomePage extends React.Component {
         <div />
       );
     }
-    console.log('THIS IS PROPS ', this.props)
-    console.log('THIS IS STATE', this.state)
     return (
       <div>
         <div className="ui three column grid">
           <div className="three column row">
             <div className="four wide column">
               <Segment raised className="ui teal segment">
-                <UserCard {...this.props} 
+                <UserCard {...this.props}
                   key={this.state.currentUser.id}
                   user={this.state.currentUser[0]}
                   update={this.handleUserCardUpdate}

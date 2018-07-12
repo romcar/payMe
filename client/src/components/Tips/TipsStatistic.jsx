@@ -20,7 +20,7 @@ export class TipsStatistic extends React.Component {
         console.log(data, 'DATA GIVEN')
         set({location: data});
         this.getAverageSalary(data.split(',').map(l => l.trim()), (data) => {
-          this.setState({ avgSalary: data })
+          set({ avgSalary: data })
         });
       });
     }
@@ -28,7 +28,7 @@ export class TipsStatistic extends React.Component {
 
   renderMessage() {
     if(this.state.results) {
-      console.log('ho');
+      console.log('ho', this.state.results);
       const numOfApps = this.state.results.numberOfApplications;
       if ( numOfApps <= 1) {
         console.log('hey');
@@ -42,7 +42,6 @@ export class TipsStatistic extends React.Component {
   getActiveRoleLocation(callback) {
     if (this.props.user.active_role !== null) {
       axios.get(`/api/applications?role_id=${this.props.user.active_role[0].id}`).then(res => {
-        console.log(res.data);
         callback(`${res.data[0].city}, ${res.data[0].state}`)
         return;
       });
@@ -108,11 +107,18 @@ export class TipsStatistic extends React.Component {
               }) : undefined}
             </ul>
             <br/>
+            { this.state.results ?
             <b>
               Possible benefits:
             </b>
+            : undefined}
             <ul>
                {this.state.results ? Object.keys(this.state.results.benefits).map((benefit , index) => {
+                 if(benefit === 'base_salary' && (this.state.results.benefits[benefit] === undefined || this.state.results.benefits[benefit] === null)) {
+                   return <li key={benefit}>No base salaries were given to us yet, keep negotiating even without this information. Usually whatever the salary you are thinking, unless its absurdly high, can have another $10,000 added onto it.</li>
+                 } else if (benefit === 'base_salary') {
+                   return <li key={benefit}>Base salary of ${this.placeCommasOnSalary(this.state.results.benefits[benefit]*.8)} - {this.placeCommasOnSalary(this.state.results.benefits[benefit]*1.1)}</li>
+                 }
                  return <li key={benefit}>{this.state.results.benefits[benefit]}</li>
                }) : undefined}
             </ul>
